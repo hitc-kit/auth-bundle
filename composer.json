@@ -1,0 +1,21 @@
+{
+    "name": "hitc-kit/auth-bundle",
+    "type": "symfony-bundle",
+    "description": "Авторизация для «hitc-kit/cms»",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Maksim Voskresenskii",
+            "email": "maksim@24webdev.ru"
+        }
+    ],
+    "require": {
+        "symfony/security-bundle": "^4.4",
+        "hitc-kit/core-bundle": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "HitcKit\\AuthBundle\\": ""
+        }
+    }
+}

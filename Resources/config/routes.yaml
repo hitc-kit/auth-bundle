@@ -1,0 +1,3 @@
+hitc_kit_auth_annotations:
+    resource: '../../Controller/'
+    type: annotation
