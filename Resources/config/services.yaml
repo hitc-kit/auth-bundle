@@ -7,7 +7,16 @@ services:
         resource: '../../Controller/*'
         tags: [ 'controller.service_arguments' ]
 
-    HitcKit\AuthBundle\Services\:
-        resource: '../../Services/*'
+#    HitcKit\AuthBundle\Services\:
+#        resource: '../../Services/*'
+
+    HitcKit\AuthBundle\Repository\:
+        resource: '../../Repository/*'
+
+    HitcKit\AuthBundle\DataFixtures\:
+        resource: '../../DataFixtures/*'
 
     HitcKit\AuthBundle\Security\LoginFormAuthenticator: ~
+
+    HitcKit\AuthBundle\Routing\DividingLoader:
+        tags: [routing.loader]

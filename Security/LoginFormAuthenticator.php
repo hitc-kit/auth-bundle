@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Core\Security;
@@ -19,27 +20,37 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'hitc_kit_auth_login';
+    public const ROUTE_LOGIN_SITE = 'hitckit_auth_login_site';
+    public const ROUTE_LOGIN_ADMIN = 'hitckit_auth_login_admin';
+    public const ROUTE_HOME_SITE = 'home';
+    public const ROUTE_HOME_ADMIN = 'sonata_admin_dashboard';
 
     private $entityManager;
     private $urlGenerator;
     private $csrfTokenManager;
+    private $request;
+    private $passwordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, RequestStack $requestStack, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
+        $this->request = $requestStack->getCurrentRequest();
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     public function supports(Request $request)
     {
-        return self::LOGIN_ROUTE === $request->attributes->get('_route')
+        $routes = [self::ROUTE_LOGIN_SITE, self::ROUTE_LOGIN_ADMIN];
+
+        return in_array($request->attributes->get('_route'), $routes)
             && $request->isMethod('POST');
     }
 
@@ -50,6 +61,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
+
         $request->getSession()->set(
             Security::LAST_USERNAME,
             $credentials['email']
@@ -61,6 +73,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
         }
@@ -83,9 +96,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        // Check the user's password or other credentials and return true or false
-        // If there are no credentials to check, you can just return true
-        return true;
+        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
 
     /**
@@ -101,14 +112,19 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
+        $route = $request->attributes->get('_route') === self::ROUTE_LOGIN_ADMIN
+            ? self::ROUTE_HOME_ADMIN
+            : self::ROUTE_HOME_SITE
+        ;
 
-        /** @noinspection PhpRouteMissingInspection */
-        return new RedirectResponse($this->urlGenerator->generate('home'));
+        return new RedirectResponse($this->urlGenerator->generate($route));
     }
 
     protected function getLoginUrl()
     {
-        return $this->urlGenerator->generate(self::LOGIN_ROUTE);
+        $pattern = '/^(sonata_admin|'.self::ROUTE_LOGIN_ADMIN.')/';
+        $route = $this->request->attributes->get('_route');
+        $route = preg_match($pattern, $route) ? self::ROUTE_LOGIN_ADMIN : self::ROUTE_LOGIN_SITE;
+        return $this->urlGenerator->generate($route);
     }
 }

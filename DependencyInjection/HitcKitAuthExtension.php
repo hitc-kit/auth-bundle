@@ -30,10 +30,16 @@ class HitcKitAuthExtension extends Extension implements PrependExtensionInterfac
     public function prepend(ContainerBuilder $container)
     {
         $bundles = $container->getParameter('kernel.bundles');
+        $path = __DIR__.'/../Resources/config';
 
         if (isset($bundles['SecurityBundle'])) {
-            $config = Yaml::parseFile(__DIR__.'/../Resources/config/security.yaml');
+            $config = Yaml::parseFile($path.'/security.yaml');
             $container->loadFromExtension('security', $config);
+        }
+
+        if (isset($bundles['SonataAdminBundle'])) {
+            $config = Yaml::parseFile($path.'/sonata_admin.yaml');
+            $container->prependExtensionConfig('sonata_admin', $config);
         }
     }
 }

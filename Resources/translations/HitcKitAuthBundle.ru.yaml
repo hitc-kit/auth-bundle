@@ -1,0 +1,8 @@
+authentication: Авторизация
+email: Эл. адрес
+password: Пароль
+login: Войти
+logout: Выйти
+user: Пользователь
+Email could not be found.: Эл. адрес не найден.
+Invalid credentials.: Неверные учетные данные.

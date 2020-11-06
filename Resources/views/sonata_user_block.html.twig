@@ -1,0 +1,17 @@
+{% extends '@SonataAdmin/Core/user_block.html.twig' %}
+{% trans_default_domain 'HitcKitAuthBundle' %}
+
+{% block user_block %}
+    <li class="user-body">
+        <div>{{ 'user'|trans }}:</div>
+        <div>{{ app.user.username }}</div>
+    </li>
+    <li class="user-footer">
+        <div class="pull-right">
+            <a class="btn btn-default btn-flat" href="{{ path('hitckit_auth_logout') }}" role="button">
+                <i class="fa fa-sign-out fa-fw"></i>
+                {{ 'logout'|trans }}
+            </a>
+        </div>
+    </li>
+{% endblock %}
