@@ -1,35 +1,21 @@
-{% extends get_global_template('layout') %}
-{% trans_default_domain 'HitcKitAuthBundle' %}
+{% extends '@HitcKitAdmin/base.html.twig' %}
+{% trans_default_domain "HitcKitAuthBundle" %}
 
-{% block sonata_nav %}
-{% endblock sonata_nav %}
+{% block title %}{{ 'auth'|trans }} - {{ parent() }}{% endblock %}
 
-{% block logo %}
-{% endblock logo %}
+{% set body_class = 'hold-transition login-page' %}
 
-{% block sonata_left_side %}
-{% endblock sonata_left_side %}
+{% block body %}
+    <div class="login-box mt-n5">
+        <div class="login-logo"><b>{{ block('title', '@HitcKitAdmin/base.html.twig') }}</b></div>
+        <div class="card">
+            <div class="card-body login-card-body">
+                {% if error %}
+                    <div class="alert alert-danger">
+                        {{ error.messageKey|trans(error.messageData) }}
+                    </div>
+                {% endif %}
 
-{% block body_attributes %}class="sonata-bc login-page"{% endblock %}
-
-{% block title %}{{ 'title_dashboard'|trans([], 'SonataAdminBundle') }}{% endblock %}
-
-{% block sonata_wrapper %}
-    <div class="login-box">
-        <div class="login-logo">
-            <a href="{{ path('sonata_admin_dashboard') }}">
-                <span>{{ 'Admin'|trans([], 'SonataAdminBundle') }}</span>
-            </a>
-        </div>
-        <div class="login-box-body">
-            {% block sonata_user_login_form %}
-                {% block sonata_user_login_error %}
-                    {% if error %}
-                        <div class="alert alert-danger">
-                            {{ error.messageKey|trans(error.messageData) }}
-                        </div>
-                    {% endif %}
-                {% endblock %}
                 {% for label, flashes in app.session.flashbag.all %}
                     {% for flash in flashes %}
                         <div class="alert alert-{{ label }}">
@@ -37,27 +23,37 @@
                         </div>
                     {% endfor %}
                 {% endfor %}
-                <p class="login-box-msg">{{ 'authentication'|trans }}</p>
-                <form method="post" role="form">
-                    <div class="form-group has-feedback">
-                        <input type="text" class="form-control" id="username" name="email" value="{{ last_username }}" required="required" placeholder="{{ 'email'|trans }}"/>
-                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+
+                <p class="login-box-msg">{{ 'auth'|trans }}</p>
+
+                <form method="post">
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" id="email" name="email" value="{{ last_username }}" required="required" placeholder="{{ 'email'|trans }}">
+                        <div class="input-group-append">
+                            <label class="input-group-text" for="email">
+                                <span class="fas fa-envelope"></span>
+                            </label>
+                        </div>
                     </div>
 
-                    <div class="form-group has-feedback">
-                        <input type="password" class="form-control" id="password" name="password" required="required" placeholder="{{ 'password'|trans }}"/>
-                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" id="password" name="password" required="required" placeholder="{{ 'password'|trans }}">
+                        <div class="input-group-append">
+                            <label class="input-group-text" for="password">
+                                <span class="fas fa-lock"></span>
+                            </label>
+                        </div>
                     </div>
 
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" >
 
-                    <div class="row">
-                        <div class="col-xs-4">
-                            <button type="submit" class="btn btn-primary btn-block btn-flat">{{ 'login'|trans }}</button>
+                    <div class="row justify-content-end">
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary btn-block">{{ 'enter'|trans }}</button>
                         </div>
                     </div>
                 </form>
-            {% endblock %}
+            </div>
         </div>
     </div>
-{% endblock sonata_wrapper %}
+{% endblock %}

@@ -9,7 +9,7 @@ encoders:
 # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
 providers:
     # used to reload user from session & other features (e.g. switch_user)
-    hitckit_auth_user_provider:
+    hitc_kit_auth_user_provider:
         entity:
             class: HitcKit\AuthBundle\Entity\User
             property: email
@@ -20,9 +20,9 @@ firewalls:
         security: false
     main:
         anonymous: lazy
-        provider: hitckit_auth_user_provider
+        provider: hitc_kit_auth_user_provider
         guard:
             authenticators:
                 - HitcKit\AuthBundle\Security\LoginFormAuthenticator
         logout:
-            path: hitckit_auth_logout
+            path: hitc_kit_auth_logout

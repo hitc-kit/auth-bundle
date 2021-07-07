@@ -31,7 +31,7 @@ class DividingLoader extends Loader
      */
     public function supports($resource, $type = null)
     {
-        return 'hitckit_auth' === $type && $this->getRoutes()->get($type.'_'.$resource);
+        return 'hitc_kit_auth' === $type && $this->getRoutes()->get($type.'_'.$resource);
     }
 
     protected function getRoutes(): RouteCollection {

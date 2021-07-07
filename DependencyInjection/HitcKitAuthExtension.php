@@ -36,5 +36,13 @@ class HitcKitAuthExtension extends Extension implements PrependExtensionInterfac
             $config = Yaml::parseFile($path.'/security.yaml');
             $container->loadFromExtension('security', $config);
         }
+
+        if (isset($bundles['HitcKitAdminBundle'])) {
+            $container->prependExtensionConfig('hitc_kit_admin', [
+                'templates' => [
+                    'menu_user' => '@HitcKitAuth/menu_user.html.twig'
+                ]
+            ]);
+        }
     }
 }

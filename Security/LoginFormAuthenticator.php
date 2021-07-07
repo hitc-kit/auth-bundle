@@ -26,10 +26,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
-    public const ROUTE_LOGIN_SITE = 'hitckit_auth_login_site';
-    public const ROUTE_LOGIN_ADMIN = 'hitckit_auth_login_admin';
+    public const ROUTE_LOGIN_SITE = 'hitc_kit_auth_login_site';
+    public const ROUTE_LOGIN_ADMIN = 'hitc_kit_auth_login_admin';
     public const ROUTE_HOME_SITE = 'home';
-    public const ROUTE_HOME_ADMIN = 'sonata_admin_dashboard';
+    public const ROUTE_HOME_ADMIN = 'hitc_kit_admin_dashboard';
 
     private $entityManager;
     private $urlGenerator;
@@ -82,7 +82,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Email could not be found.');
+            throw new CustomUserMessageAuthenticationException('email_not_found');
         }
 
         return $user;
@@ -122,9 +122,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     protected function getLoginUrl()
     {
-        $pattern = '/^(sonata_admin|'.self::ROUTE_LOGIN_ADMIN.')/';
-        $route = $this->request->attributes->get('_route');
-        $route = preg_match($pattern, $route) ? self::ROUTE_LOGIN_ADMIN : self::ROUTE_LOGIN_SITE;
+        $path = $this->request->getPathInfo();
+        $pathAdmin = $this->urlGenerator->generate(self::ROUTE_HOME_ADMIN);
+        $route = strpos($path, $pathAdmin) === 0 ? self::ROUTE_LOGIN_ADMIN : self::ROUTE_LOGIN_SITE;
         return $this->urlGenerator->generate($route);
     }
 }

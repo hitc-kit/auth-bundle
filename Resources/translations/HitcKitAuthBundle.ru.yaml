@@ -1,8 +1,7 @@
-authentication: Авторизация
-email: Эл. адрес
+auth: Авторизация
+email: Эл. почта
 password: Пароль
-login: Войти
-logout: Выйти
-user: Пользователь
-Email could not be found.: Эл. адрес не найден.
+enter: Войти
+email_not_found: Эл. почта не найдена.
 Invalid credentials.: Неверные учетные данные.
+user_exit: Выйти

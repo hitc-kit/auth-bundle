@@ -7,9 +7,6 @@ services:
         resource: '../../Controller/*'
         tags: [ 'controller.service_arguments' ]
 
-#    HitcKit\AuthBundle\Services\:
-#        resource: '../../Services/*'
-
     HitcKit\AuthBundle\Repository\:
         resource: '../../Repository/*'
 

@@ -1,0 +1,8 @@
+{% extends '@HitcKitAdmin/menu_user.html.twig' %}
+{% trans_default_domain "HitcKitAuthBundle" %}
+
+{% block items %}
+    {{ parent() }}
+    <div class="dropdown-divider"></div>
+    <a href="{{ path('hitc_kit_auth_logout') }}" class="dropdown-item"><i class="fas fa-sign-out-alt mr-2"></i> {{ 'user_exit'|trans }}</a>
+{% endblock %}

@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route(path="{zero}", defaults={"zero": ""}, name="hitckit_auth_login_site")
+     * @Route("{zero}", defaults={"zero": ""}, requirements={"zero": "^\\/?$"}, name="hitc_kit_auth_login_site")
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */
@@ -30,13 +30,13 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route(path="{zero}", defaults={"zero": ""}, name="hitckit_auth_login_admin")
+     * @Route("{zero}", defaults={"zero": ""}, requirements={"zero": "^\\/?$"}, name="hitc_kit_auth_login_admin")
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */
     public function adminLogin(AuthenticationUtils $authenticationUtils): Response
     {
-        if (!isset($this->getParameter('kernel.bundles')['SonataAdminBundle'])) {
+        if (!isset($this->getParameter('kernel.bundles')['HitcKitAdminBundle'])) {
             throw $this->createNotFoundException();
         }
 
@@ -53,7 +53,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route(path="{zero}", defaults={"zero": ""}, name="hitckit_auth_logout")
+     * @Route("{zero}", defaults={"zero": ""}, requirements={"zero": "^\\/?$"}, name="hitc_kit_auth_logout")
      */
     public function siteLogout()
     {

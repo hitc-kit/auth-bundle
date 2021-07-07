@@ -1,0 +1,14 @@
+hitc_kit_auth_login_site:
+    resource: login_site
+    type: hitc_kit_auth
+    prefix: /auth
+
+hitc_kit_auth_login_admin:
+    resource: login_admin
+    type: hitc_kit_auth
+    prefix: /admin/auth
+
+hitc_kit_auth_logout:
+    resource: logout
+    type: hitc_kit_auth
+    prefix: /exit
